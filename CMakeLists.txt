@@ -389,6 +389,7 @@ if (FLOATSRC)
 endif ()
 
 add_executable(gecode-test EXCLUDE_FROM_ALL ${TESTSRC} ${TESTHDR})
+set_target_properties(gecode-test PROPERTIES EXCLUDE_FROM_ALL $<NOT:$<BOOL:${BUILD_TESTING}>>)
 target_link_libraries(gecode-test gecodeflatzinc gecodeminimodel)
 
 add_executable(fzn-gecode ${FLATZINCEXESRC})
@@ -428,13 +429,13 @@ endif()
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-option(BUILD_EXAMPLES "Build examples." OFF) 
+option(BUILD_EXAMPLES "Build examples." OFF)
 if (${BUILD_EXAMPLES})
   add_subdirectory(examples)
 endif()
 
 enable_testing()
-add_test(test gecode-test
+add_test(NAME test COMMAND gecode-test
   -iter 2 -test Branch::Int::Dense::3
   -test Int::Linear::Int::Int::Eq::Bnd::12::4
   -test Int::Distinct::Random
